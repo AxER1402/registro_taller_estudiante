@@ -1,0 +1,37 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #18253b;
+  background: #f4f6f8;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+.contenedor { width: min(100% - 2rem, 900px); margin: 0 auto; padding: 3rem 0; }
+.encabezado { margin-bottom: 1.5rem; }
+.etiqueta { color: #087e83; font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+h1 { margin: .25rem 0; font-size: clamp(2rem, 6vw, 3.5rem); }
+.panel { margin: 1rem 0; border: 1px solid #dce2e8; border-radius: 16px; padding: 1.25rem; background: white; box-shadow: 0 10px 28px #18253b0d; }
+form {
+  display: grid;
+  gap: .65rem;
+  border: 2px solid #087e83; 
+  border-radius: 12px;
+  padding: 1.5rem;           
+  margin: 1.5rem 0;          
+}
+label { margin-top: .45rem; font-weight: 700; }
+input, select { width: 100%; min-height: 44px; border: 1px solid #aeb9c7; border-radius: 9px; padding: .65rem .75rem; background: white; font: inherit; }
+input:focus, select:focus { outline: 3px solid #bde1d8; border-color: #087e83; }
+button { min-height: 46px; margin-top: .5rem; border: 0; border-radius: 9px; padding: .7rem 1rem; color: white; background: #087e83; font: inherit; font-weight: 800; cursor: pointer; }
+button:hover { background: #06656b; }
+.mensaje { min-height: 1.5em; color: #06656b; font-weight: 700; }
+#lista-inscripciones { display: grid; gap: .6rem; padding-left: 1.25rem; }
+#lista-inscripciones li { padding: .6rem; border-radius: 8px; background: #eef9f6; }
+.vacio { color: #647188; background: transparent !important; }
+
+/* Media query: en teléfonos se reduce el espacio para que los campos tengan más lugar */
+@media (max-width: 640px) {
+  .contenedor { padding: 1.5rem 0; }
+  .panel { padding: 1rem; }
+  form { padding: 1rem; }
+}
