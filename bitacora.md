@@ -231,3 +231,11 @@ git add elige qué cambios quiero guardar; es como meterlos en una caja antes de
 ¿Qué información comunica un buen mensaje de commit?
 
 Un buen mensaje dice qué cambió y, si hace falta, por qué, en pocas palabras. Así, cuando yo o el catedrático revisamos el historial, se entiende cada paso sin tener que abrir el código. Por ejemplo, "Agrega validación del correo en la ruta POST" dice mucho más que "cambios" o "ya quedó".
+
+## Cuestionario · respuestas incorrectas
+Puntuación: 6 de 7. Me equivoqué en una pregunta:
+
+5. ¿Cuándo se activa @media (max-width: 640px)?
+Respuesta correcta: cuando el ancho es de 640 px o menos.
+
+max-width quiere decir "ancho máximo", así que las reglas de adentro se aplican mientras la pantalla mida hasta 640px de ancho, incluyendo los 640 exactos. Si la pantalla es más ancha, esas reglas se ignoran. No tiene nada que ver con el alto (para eso sería max-height) y tampoco se aplica siempre. En mi proyecto es la regla que reduce el relleno de los paneles cuando la ventana se hace angosta, como en un teléfono. Para no confundirme: max-width es "hasta este ancho" y min-width es "desde este ancho".
