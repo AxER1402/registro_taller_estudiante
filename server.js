@@ -174,6 +174,14 @@ app.get("/api/reportes/resumen", (req, res) => {
   res.json({ total, porTaller, porHorario, porModalidad, porNivel });
 });
 
-app.listen(PORT, () => {
+// En Express 5, si el servidor no puede iniciar (por ejemplo, porque el puerto
+// ya está ocupado por otro npm start), el error llega como parámetro.
+app.listen(PORT, (error) => {
+  if (error) {
+    console.error(error.code === "EADDRINUSE"
+      ? `No se pudo iniciar: el puerto ${PORT} ya está en uso. Cierra el otro servidor (Ctrl + C) e intenta de nuevo.`
+      : `No se pudo iniciar el servidor: ${error.message}`);
+    process.exit(1);
+  }
   console.log(`Servidor disponible en http://localhost:${PORT}`);
 });

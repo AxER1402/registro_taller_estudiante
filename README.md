@@ -39,6 +39,8 @@ Para detener el servidor, presiona `Ctrl + C` en la terminal.
 
 > **Aviso normal al iniciar:** Node.js puede mostrar `ExperimentalWarning: SQLite is an experimental feature`. No es un error; el servidor funciona igual.
 
+> **Si dice que el puerto 3000 ya está en uso:** ya hay otro servidor encendido (por ejemplo, en otra terminal). Ciérralo con `Ctrl + C` y vuelve a ejecutar `npm start`.
+
 ### Si PowerShell bloquea npm.ps1
 
 Si aparece un mensaje que dice que la ejecución de scripts está deshabilitada, usa estos comandos en la misma terminal:
@@ -102,6 +104,8 @@ Las respuestas correctas traen `mensaje` y las de error traen `error`, por ejemp
 
 Se valida **dos veces**: en el navegador para ayudar a quien llena el formulario, y en Express porque cualquiera podría llamar a la API sin usar la página.
 
+En el navegador, las reglas son los atributos del HTML (`required`, `type="email"`, `pattern`, `minlength`). El formulario tiene `novalidate` para que el navegador no muestre sus burbujas. En su lugar, `app.js` usa `checkValidity()` y escribe un mensaje propio en rojo debajo de cada campo. El mensaje desaparece en cuanto el campo se corrige.
+
 | Regla | Navegador (HTML) | Servidor (Express) |
 |---|---|---|
 | Todos los campos son obligatorios | `required` | Rechaza vacíos o con solo espacios (`trim()`) |
@@ -133,7 +137,7 @@ La página muestra el total en una tarjeta destacada y cada agrupación con barr
 1. **Crear:** llena el formulario y presiona **Registrar inscripción**. Aparece en la lista y el total sube.
 2. **Leer:** recarga la página; la lista se llena con lo que hay en la base.
 3. **Actualizar:** presiona **Editar** en una fila. Sus datos se cargan en el formulario, el botón cambia a **Guardar cambios** y aparece **Cancelar edición**. Cambia algo y guarda.
-4. **Eliminar:** presiona **Eliminar** y confirma. La fila desaparece y los reportes se actualizan.
+4. **Eliminar:** presiona **Eliminar**. La tarjeta pregunta "¿Eliminar esta inscripción?"; presiona **Sí, eliminar**. La tarjeta desaparece y los reportes se actualizan.
 5. **Persistencia:** detén el servidor (`Ctrl + C`), vuelve a ejecutar `npm start` y recarga: los datos siguen ahí.
 
 ### Desde la terminal (macOS, Linux o Git Bash)
@@ -177,6 +181,7 @@ curl http://localhost:3000/api/reportes/resumen
 | Validación | Correo inválido, campo vacío, teléfono con letras u opción inexistente responden `400` y no se guardan. | ✅ |
 | Persistencia | Al reiniciar el servidor, los datos continúan. | ✅ |
 | Diseño | Dos columnas en escritorio, una columna en móvil y sin desplazamiento horizontal a 390 px. | ✅ |
+| Selects | Se abren con clic o teclado (flechas, Enter, Escape, letras), guardan el valor en el select real y la flecha queda centrada. | ✅ |
 | Reporte | El total y cada agrupación coinciden con la base. | ✅ |
 
 ## Capturas
@@ -187,9 +192,17 @@ Todas las capturas usan **datos inventados**.
 |---|---|
 | ![Lista de participantes](docs/capturas/02-lista.png) | ![Reportes](docs/capturas/03-reportes.png) |
 
+| Select personalizado abierto | Errores marcados por el navegador |
+|---|---|
+| ![Select personalizado](docs/capturas/08-select-personalizado.png) | ![Validación en el navegador](docs/capturas/09-validacion-navegador.png) |
+
 | Editando una inscripción (PUT) | Express rechaza un valor inválido |
 |---|---|
 | ![Modo edición](docs/capturas/05-edicion.png) | ![Validación del servidor](docs/capturas/04-validacion-servidor.png) |
+
+| Confirmación antes de eliminar | Móvil: tarjeta de la lista |
+|---|---|
+| ![Confirmar eliminación](docs/capturas/10-confirmar-eliminar.png) | ![Lista en móvil](docs/capturas/11-movil-lista.png) |
 
 | Móvil: formulario | Móvil: reportes |
 |---|---|
@@ -204,7 +217,8 @@ registro-taller-estudiante/
 ├── public/
 │   ├── index.html     # Formulario, lista y sección de reportes
 │   ├── styles.css     # Estilos y diseño adaptable
-│   └── app.js         # fetch a la API, edición, eliminación y barras
+│   ├── select-personalizado.js  # Menús propios en lugar de los select del navegador
+│   └── app.js         # fetch a la API, validación, edición, eliminación y barras
 ├── docs/capturas/     # Evidencias de funcionamiento
 ├── package.json
 ├── .gitignore         # Excluye node_modules/, .env y registro_taller.db
