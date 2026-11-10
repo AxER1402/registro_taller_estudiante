@@ -221,11 +221,16 @@ La clave primaria es la columna que identifica a cada fila y no se puede repetir
 
 ## Git y GitHub
 - Resumen propio (2–3 frases):
+Git es un programa que guarda el historial de cambios de mi proyecto, como fotos de cada versión. Si algo se rompe, puedo ver qué cambió y regresar a una versión anterior. GitHub es la página donde subo ese historial para entregarlo y tenerlo respaldado en internet.
+
 - Explica add, commit y push:
 git add elige qué cambios quiero guardar; es como meterlos en una caja antes de cerrarla. git commit cierra esa caja y guarda una "foto" del proyecto en mi computadora, con un mensaje que dice qué cambié. git push sube esos commits a GitHub para que queden en internet y otros puedan verlos.
 
 - Diferencia entre Git y GitHub:
+Git es la herramienta que funciona en mi computadora y lleva el control de versiones aunque no tenga internet. GitHub es un sitio web que guarda repositorios de Git en la nube para compartirlos. Puedo usar Git sin GitHub, pero GitHub sin Git no tiene sentido. En mi proyecto, git commit guarda los cambios solo en mi computadora y git push es el que los manda a GitHub.
+
 - Pregunta que podría aparecer en el examen:
+¿Qué diferencia hay entre git commit y git push?
 
 ## Actividad · mensajes de commit
 ¿Qué información comunica un buen mensaje de commit?
@@ -239,3 +244,45 @@ Puntuación: 6 de 7. Me equivoqué en una pregunta:
 Respuesta correcta: cuando el ancho es de 640 px o menos.
 
 max-width quiere decir "ancho máximo", así que las reglas de adentro se aplican mientras la pantalla mida hasta 640px de ancho, incluyendo los 640 exactos. Si la pantalla es más ancha, esas reglas se ignoran. No tiene nada que ver con el alto (para eso sería max-height) y tampoco se aplica siempre. En mi proyecto es la regla que reduce el relleno de los paneles cuando la ventana se hace angosta, como en un teléfono. Para no confundirme: max-width es "hasta este ancho" y min-width es "desde este ancho".
+
+## Proyecto final · base de datos SQLite
+- Resumen propio (2–3 frases):
+En la versión final el registro dejó de guardar las inscripciones en un arreglo, que se borraba cada vez que apagaba el servidor. Ahora se guardan en una base de datos SQLite, que es un solo archivo (registro_taller.db) y no necesita instalar un servidor aparte. Además, la página ya puede editar y eliminar inscripciones y muestra reportes con barras.
+
+- Dos términos clave y su explicación:
+Sentencia preparada: es una consulta SQL que lleva signos ? en lugar de los valores. Los datos se mandan aparte con .run(), así lo que escribe el usuario nunca se mezcla con el SQL y no puede meter instrucciones como DROP TABLE.
+GROUP BY: junta las filas que tienen el mismo valor en una columna. Con COUNT(*) cuenta cuántas hay en cada grupo; así saco cuántos inscritos tiene cada taller para los reportes.
+
+- Ejemplo de código explicado:
+ app.delete("/api/inscripciones/:id", (req, res) => {
+   const id = leerId(req);
+   if (id === null) {
+     return res.status(400).json({ error: "Id inválido." });
+   }
+   const resultado = db.prepare("DELETE FROM inscripciones WHERE id = ?").run(id);
+   if (resultado.changes === 0) {
+     return res.status(404).json({ error: "No se encontró la inscripción." });
+   }
+   res.json({ mensaje: "Inscripción eliminada." });
+ });
+
+Esta ruta está en server.js y borra una inscripción. El id viene en la dirección, por ejemplo /api/inscripciones/3. Primero reviso que sea un número entero mayor que 0; si no, respondo 400. Después ejecuto el DELETE con el id en el signo ?. resultado.changes dice cuántas filas se borraron: si es 0, ese id no existía y respondo 404.
+
+- Pregunta que podría aparecer en el examen:
+¿Por qué PUT y DELETE responden 404 si el id no existe y cómo lo sabe el servidor?
+
+## Actividad · Prepárate para explicar
+¿Cómo llega un dato del formulario a la base?
+Cada campo del formulario tiene un name. Al enviarlo, app.js evita que la página se recargue, junta los valores con FormData y los manda con fetch como JSON. En server.js, express.json() los convierte en req.body, la función validarInscripcion los revisa y, si están bien, el INSERT con signos ? los guarda en registro_taller.db. El servidor responde 201 y la página vuelve a pedir la lista y los reportes.
+
+¿Qué diferencia hay entre GET, POST, PUT y DELETE?
+GET pide datos y no cambia nada (SELECT). POST crea una inscripción nueva (INSERT) y responde 201. PUT cambia una que ya existe, indicada por su id (UPDATE). DELETE la borra por su id (DELETE). PUT y DELETE responden 404 si el id no existe.
+
+¿Cómo comprobaste que los datos persisten?
+Guardé inscripciones, detuve el servidor con Ctrl + C, lo volví a iniciar con npm start y recargué la página: los datos seguían ahí. Con el arreglo de antes, la lista quedaba vacía al reiniciar.
+
+¿Qué consultas alimentan los reportes?
+SELECT COUNT(*) AS total para el total, y una consulta con GROUP BY y COUNT(*) por taller, por horario, por modalidad y por nivel de experiencia. Están todas en la ruta GET /api/reportes/resumen.
+
+¿Qué validas en el navegador y qué en Express?
+Las mismas reglas en los dos lados: campos obligatorios, largo del nombre, formato del correo y del teléfono, y que los select traigan una opción válida. En el navegador uso required, type="email", pattern, minlength y maxlength. En Express las revisa validarInscripcion. La del navegador ayuda a llenar bien el formulario, pero se puede saltar; la de Express es la que protege la base.
