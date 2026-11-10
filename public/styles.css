@@ -10,28 +10,133 @@ body { margin: 0; min-height: 100vh; }
 .encabezado { margin-bottom: 1.5rem; }
 .etiqueta { color: #087e83; font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
 h1 { margin: .25rem 0; font-size: clamp(2rem, 6vw, 3.5rem); }
+h2 { margin-top: 0; }
 .panel { margin: 1rem 0; border: 1px solid #dce2e8; border-radius: 16px; padding: 1.25rem; background: white; box-shadow: 0 10px 28px #18253b0d; }
+
+/* ---------- Formulario ---------- */
 form {
-  display: grid;
-  gap: .65rem;
-  border: 2px solid #087e83; 
+  border: 2px solid #087e83;
   border-radius: 12px;
-  padding: 1.5rem;           
-  margin: 1.5rem 0;          
+  padding: 1.5rem;
+  margin: 1.5rem 0 1rem;
 }
-label { margin-top: .45rem; font-weight: 700; }
-input, select { width: 100%; min-height: 44px; border: 1px solid #aeb9c7; border-radius: 9px; padding: .65rem .75rem; background: white; font: inherit; }
-input:focus, select:focus { outline: 3px solid #bde1d8; border-color: #087e83; }
-button { min-height: 46px; margin-top: .5rem; border: 0; border-radius: 9px; padding: .7rem 1rem; color: white; background: #087e83; font: inherit; font-weight: 800; cursor: pointer; }
-button:hover { background: #06656b; }
-.mensaje { min-height: 1.5em; color: #06656b; font-weight: 700; }
-#lista-inscripciones { display: grid; gap: .6rem; padding-left: 1.25rem; }
-#lista-inscripciones li { padding: .6rem; border-radius: 8px; background: #eef9f6; }
+
+/* Dos columnas en pantallas amplias: cada .campo ocupa una celda. */
+.formulario-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* Etiqueta arriba y control abajo. */
+.campo { display: grid; gap: .4rem; align-content: start; }
+label { font-weight: 700; }
+
+input, select, textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: .65rem .75rem;
+  border: 1px solid #aeb9c7;
+  border-radius: 9px;
+  background: white;
+  font: inherit;
+}
+input:focus, select:focus, textarea:focus { outline: 3px solid #bde1d8; border-color: #087e83; }
+
+/* Marca en rojo un campo que el usuario ya tocó y quedó inválido. */
+input:user-invalid, select:user-invalid { border-color: #b42318; }
+
+/* Los botones ocupan toda la fila de la cuadrícula. */
+.acciones-formulario { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .75rem; }
+
+button {
+  min-height: 44px;
+  border: 2px solid #087e83;
+  border-radius: 9px;
+  padding: .6rem 1rem;
+  color: white;
+  background: #087e83;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+button:hover { background: #06656b; border-color: #06656b; }
+button:focus-visible { outline: 3px solid #bde1d8; outline-offset: 2px; }
+
+.boton-secundario { color: #087e83; background: white; }
+.boton-secundario:hover { color: white; }
+
+.boton-peligro { color: #b42318; border-color: #b42318; background: white; }
+.boton-peligro:hover { color: white; background: #b42318; border-color: #b42318; }
+
+/* Aviso que aparece mientras se edita una inscripción. */
+.aviso-edicion {
+  margin: 0 0 -.5rem;
+  padding: .6rem .8rem;
+  border-left: 4px solid #c27c0e;
+  border-radius: 6px;
+  background: #fff6e5;
+  font-weight: 700;
+}
+
+.mensaje { min-height: 1.5em; margin: 0; color: #06656b; font-weight: 700; }
+.mensaje.error { color: #b42318; }
+
+/* ---------- Lista de inscripciones ---------- */
+#lista-inscripciones { display: grid; gap: .6rem; margin: 0; padding: 0; list-style: none; }
+
+#lista-inscripciones li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .8rem 1rem;
+  border-radius: 10px;
+  background: #eef9f6;
+}
+#lista-inscripciones li.en-edicion { outline: 3px solid #c27c0e; background: #fff6e5; }
+
+.datos-inscripcion { min-width: 0; }
+.datos-inscripcion p { margin: .15rem 0; overflow-wrap: anywhere; }
+.datos-inscripcion .nombre { font-weight: 800; }
+.datos-inscripcion .detalle { color: #3d4a5f; font-size: .92rem; }
+
+.acciones-item { display: flex; gap: .5rem; }
+.acciones-item button { min-height: 38px; padding: .4rem .8rem; }
+
 .vacio { color: #647188; background: transparent !important; }
 
-/* Media query: en teléfonos se reduce el espacio para que los campos tengan más lugar */
+/* ---------- Reportes ---------- */
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.tarjeta { padding: 1rem; border: 1px solid #dce2e8; border-radius: 12px; background: white; }
+.tarjeta h3 { margin: 0 0 .75rem; font-size: 1rem; }
+
+.tarjeta-total { grid-column: 1 / -1; background: #087e83; border-color: #087e83; color: white; }
+.tarjeta-total h3 { margin: 0; }
+#total { margin: .25rem 0 0; font-size: 2.75rem; font-weight: 800; line-height: 1; }
+
+.reporte-barras { display: grid; gap: .6rem; margin: 0; padding: 0; list-style: none; }
+.reporte-barras p { display: flex; justify-content: space-between; gap: .5rem; margin: 0 0 .25rem; font-size: .92rem; }
+.barra-fondo { height: 12px; border-radius: 8px; background: #e5edf0; overflow: hidden; }
+.barra { height: 100%; border-radius: 8px; background: #087e83; }
+
+/* ---------- Pantallas pequeñas ---------- */
 @media (max-width: 640px) {
   .contenedor { padding: 1.5rem 0; }
   .panel { padding: 1rem; }
   form { padding: 1rem; }
+
+  /* Una sola columna en teléfonos. */
+  .formulario-grid,
+  .resumen { grid-template-columns: 1fr; }
+
+  .acciones-formulario button { flex: 1 1 100%; }
+  .acciones-item { width: 100%; }
+  .acciones-item button { flex: 1; }
 }

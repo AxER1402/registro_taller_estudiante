@@ -4,46 +4,85 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Registro al taller de Desarrollo Web</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
   <main class="contenedor">
     <header class="encabezado">
-      <p class="etiqueta">Universidad · Actividad de clase</p>
+      <p class="etiqueta">Universidad · Proyecto final</p>
       <h1>Registro al taller</h1>
       <p>Completa tus datos para reservar un espacio.</p>
     </header>
 
-    <section class="panel" aria-labelledby="titulo-formulario">
+    <section class="panel" id="panel-formulario" aria-labelledby="titulo-formulario">
       <h2 id="titulo-formulario">Datos de inscripción</h2>
-      <form id="formulario-registro">
-        <label for="nombre">Nombre completo</label>
-        <input id="nombre" name="nombre" type="text" required minlength="2" autocomplete="name">
+      <p id="aviso-edicion" class="aviso-edicion" hidden></p>
 
-        <label for="correo">Correo electrónico</label>
-        <input id="correo" name="correo" type="email" required autocomplete="email">
+      <form id="formulario-registro" class="formulario-grid">
+        <div class="campo">
+          <label for="nombre">Nombre completo</label>
+          <input id="nombre" name="nombre" type="text" required minlength="2" maxlength="80" autocomplete="name">
+        </div>
 
-        <label for="taller">Taller</label>
-        <select id="taller" name="taller" required>
-          <option value="">Selecciona un taller</option>
-          <option value="HTML y CSS">HTML y CSS</option>
-          <option value="JavaScript">JavaScript</option>
-          <option value="Node.js y Express">Node.js y Express</option>
-        </select>
+        <div class="campo">
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" name="correo" type="email" required maxlength="120" autocomplete="email">
+        </div>
 
-        <label for="telefono">Teléfono</label>
-          <input id="telefono" name="telefono" type="tel" autocomplete="tel" placeholder="Ej. 5555-1234"> 
+        <div class="campo">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" name="telefono" type="tel" required minlength="8" maxlength="20"
+                 pattern="[0-9+\-\s]{8,20}" title="Entre 8 y 20 caracteres: números, espacios, guiones o +"
+                 autocomplete="tel" placeholder="Ej. 5555-1234">
+        </div>
 
-        <label for="horario">Horario</label>
+        <div class="campo">
+          <label for="taller">Taller</label>
+          <select id="taller" name="taller" required>
+            <option value="">Selecciona un taller</option>
+            <option value="HTML y CSS">HTML y CSS</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="Node.js y Express">Node.js y Express</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="horario">Horario</label>
           <select id="horario" name="horario" required>
             <option value="">Selecciona un horario</option>
             <option value="Mañana (8:00 - 10:00)">Mañana (8:00 - 10:00)</option>
             <option value="Tarde (14:00 - 16:00)">Tarde (14:00 - 16:00)</option>
             <option value="Noche (18:00 - 20:00)">Noche (18:00 - 20:00)</option>
           </select>
+        </div>
 
-        <button type="submit">Registrar inscripción</button>
+        <!-- Campo nuevo 1 -->
+        <div class="campo">
+          <label for="modalidad">Modalidad</label>
+          <select id="modalidad" name="modalidad" required>
+            <option value="">Selecciona una opción</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Virtual">Virtual</option>
+          </select>
+        </div>
+
+        <!-- Campo nuevo 2 -->
+        <div class="campo">
+          <label for="nivel_experiencia">Experiencia previa</label>
+          <select id="nivel_experiencia" name="nivel_experiencia" required>
+            <option value="">Selecciona un nivel</option>
+            <option value="Inicial">Inicial</option>
+            <option value="Intermedio">Intermedio</option>
+            <option value="Avanzado">Avanzado</option>
+          </select>
+        </div>
+
+        <div class="acciones-formulario">
+          <button type="submit" id="boton-guardar">Registrar inscripción</button>
+          <button type="button" id="boton-cancelar" class="boton-secundario" hidden>Cancelar edición</button>
+        </div>
       </form>
       <p id="mensaje" class="mensaje" role="status" aria-live="polite"></p>
     </section>
@@ -53,6 +92,34 @@
       <ul id="lista-inscripciones" aria-live="polite">
         <li class="vacio">Aún no hay inscripciones.</li>
       </ul>
+    </section>
+
+    <section class="panel" aria-labelledby="titulo-reportes">
+      <h2 id="titulo-reportes">Reportes</h2>
+      <p id="reportes-vacio" class="vacio" hidden>Todavía no hay inscripciones para reportar.</p>
+
+      <div class="resumen">
+        <article class="tarjeta tarjeta-total">
+          <h3>Total de inscripciones</h3>
+          <p id="total">0</p>
+        </article>
+        <article class="tarjeta">
+          <h3>Inscripciones por taller</h3>
+          <ul id="reporte-talleres" class="reporte-barras"></ul>
+        </article>
+        <article class="tarjeta">
+          <h3>Inscripciones por horario</h3>
+          <ul id="reporte-horarios" class="reporte-barras"></ul>
+        </article>
+        <article class="tarjeta">
+          <h3>Inscripciones por modalidad</h3>
+          <ul id="reporte-modalidades" class="reporte-barras"></ul>
+        </article>
+        <article class="tarjeta">
+          <h3>Inscripciones por experiencia previa</h3>
+          <ul id="reporte-niveles" class="reporte-barras"></ul>
+        </article>
+      </div>
     </section>
   </main>
 </body>
