@@ -1,3 +1,11 @@
 node_modules/
 .env
 .DS_Store
+
+# Base de datos SQLite local: no se sube a GitHub
+registro_taller.db
+registro_taller.db-shm
+registro_taller.db-wal
+
+# Enunciado de la tarea: no forma parte del código
+TareaFinal.pdf
